@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Mapping DTD Version 1.0//EN"
+        "http://castor.org/mapping.dtd">
+<mapping>
+    <class name="com.siwoo.application.domain.Singers" >
+        <field name="singers"
+               collection="arraylist"
+               type="com.siwoo.application.domain.Singer">
+            <bind-xml name="singer" />
+        </field>
+    </class>
+
+    <class name="com.siwoo.application.domain.Singer" identity="id">
+        <map-to xml="singer" />
+        <field name="id" type="long">
+            <bind-xml name="id" node="element" />
+        </field>
+        <field name="firstName" type="string">
+            <bind-xml name="firstName" node="element" />
+        </field>
+        <field name="lastName" type="string">
+            <bind-xml name="lastName" node="element" />
+        </field>
+        <field name="birthDate" type="string" handler="dateHandler">
+            <bind-xml name="birthDate" node="element" />
+        </field>
+        <field name="version" type="integer">
+            <bind-xml name="version" node="element" />
+        </field>
+    </class>
+
+    <field-handler name="dateHandler" class="com.siwoo.application.converter.LocalDateFieldHandler">
+        <param name="date-format" value="yyyy-MM-dd" />
+    </field-handler>
+</mapping>
