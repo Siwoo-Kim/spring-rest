@@ -47,6 +47,9 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-tx:5.0.3.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-web:5.0.3.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:5.0.3.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-config:5.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-core:5.0.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-web:5.0.1.RELEASE" />
         </element>
         <element id="directory" name="classes">
           <element id="module-output" name="prospring12r" />

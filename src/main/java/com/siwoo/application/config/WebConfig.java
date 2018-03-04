@@ -3,12 +3,10 @@ package com.siwoo.application.config;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.omg.CORBA.OBJ_ADAPTER;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -24,24 +22,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-@Configuration @EnableWebMvc
-@ComponentScan("com.siwoo.application.controller")
-public class WebConfig implements WebMvcConfigurer{
-
-    @Autowired ApplicationContext rootContext;
-
-    @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
-    }
+@EnableWebMvc
+@Configuration @ComponentScan("com.siwoo.application.controller")
+public class WebConfig implements WebMvcConfigurer {
 
     @Bean
-    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(){
+    MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(){
         MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
         messageConverter.setObjectMapper(objectMapper());
         return messageConverter;
     }
-
 
     @Bean
     public ObjectMapper objectMapper() {
@@ -54,6 +44,11 @@ public class WebConfig implements WebMvcConfigurer{
     }
 
     @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
+    }
+
+    @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(mappingJackson2HttpMessageConverter());
         converters.add(singerMessageConverter());
@@ -61,20 +56,20 @@ public class WebConfig implements WebMvcConfigurer{
 
     @Bean
     public MarshallingHttpMessageConverter singerMessageConverter() {
-        MarshallingHttpMessageConverter mc = new MarshallingHttpMessageConverter();
-        mc.setMarshaller(castorMarshaller());
-        mc.setUnmarshaller(castorMarshaller());
+        MarshallingHttpMessageConverter messageConverter = new MarshallingHttpMessageConverter();
+        messageConverter.setMarshaller(castorMarshaller());
+        messageConverter.setUnmarshaller(castorMarshaller());
         List<MediaType> mediaTypes = new ArrayList<>();
-        MediaType mt = new MediaType("application","xml");
-        mediaTypes.add(mt);
-        mc.setSupportedMediaTypes(mediaTypes);
-        return mc;
+        MediaType xmlMeidaType = new MediaType("application","xml");
+        mediaTypes.add(xmlMeidaType);
+        messageConverter.setSupportedMediaTypes(mediaTypes);
+        return messageConverter;
     }
 
     @Bean
     public CastorMarshaller castorMarshaller() {
-        CastorMarshaller castorMarshaller = new CastorMarshaller();
-        castorMarshaller.setMappingLocation(rootContext.getResource("classpath:/META-INF/xml/oxm-mapping.xml"));
-        return castorMarshaller;
+        CastorMarshaller marshaller = new CastorMarshaller();
+        marshaller.setMappingLocation(new ClassPathResource("META-INF/xml/oxm-mapping.xml"));
+        return marshaller;
     }
 }
